@@ -16,3 +16,10 @@ Base do sistema de reprodução bovina em PHP procedural + PostgreSQL.
 - Lotes (CRUD + resumo).
 - Eventos reprodutivos (CRUD inicial).
 - Scanner de brinco por código de barras (modo leitor USB teclado).
+- Bezerros (cadastro e listagem).
+- Relatórios simples (resumos por tipo e mês).
+
+## Preparação para uso offline
+- `manifest.webmanifest` para instalação PWA básica.
+- `service-worker.js` para cache de recursos essenciais e fallback em `offline.html`.
+- Registro automático do service worker via `assets/js/app.js`.

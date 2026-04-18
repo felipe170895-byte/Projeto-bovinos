@@ -91,6 +91,22 @@ CREATE TABLE IF NOT EXISTS eventos_reprodutivos (
     CONSTRAINT chk_eventos_tipo CHECK (tipo_evento IN ('cio', 'inseminacao', 'diagnostico_gestacao', 'parto', 'secagem', 'outro'))
 );
 
+
+CREATE TABLE IF NOT EXISTS bezerros (
+    id BIGSERIAL PRIMARY KEY,
+    fazenda_id BIGINT NOT NULL REFERENCES fazendas(id) ON DELETE CASCADE,
+    animal_mae_id BIGINT NULL REFERENCES animais(id) ON DELETE SET NULL,
+    numero_brinco VARCHAR(50) NOT NULL,
+    sexo CHAR(1),
+    data_nasc DATE NOT NULL,
+    peso_nasc_kg NUMERIC(6,2),
+    observacoes TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT chk_bezerros_sexo CHECK (sexo IS NULL OR sexo IN ('M', 'F')),
+    CONSTRAINT uq_bezerros_brinco_por_fazenda UNIQUE (fazenda_id, numero_brinco)
+);
+
 CREATE INDEX IF NOT EXISTS idx_usuarios_fazenda_padrao ON usuarios (fazenda_id);
 CREATE INDEX IF NOT EXISTS idx_usuarios_fazendas_fazenda ON usuarios_fazendas (fazenda_id);
 CREATE INDEX IF NOT EXISTS idx_lotes_fazenda ON lotes (fazenda_id);
@@ -102,5 +118,9 @@ CREATE INDEX IF NOT EXISTS idx_animais_lotes_lote ON animais_lotes (lote_id);
 CREATE INDEX IF NOT EXISTS idx_eventos_animal ON eventos_reprodutivos (animal_id);
 CREATE INDEX IF NOT EXISTS idx_eventos_data ON eventos_reprodutivos (data_evento);
 CREATE INDEX IF NOT EXISTS idx_eventos_lote ON eventos_reprodutivos (lote_id);
+
+
+CREATE INDEX IF NOT EXISTS idx_bezerros_fazenda ON bezerros (fazenda_id);
+CREATE INDEX IF NOT EXISTS idx_bezerros_mae ON bezerros (animal_mae_id);
 
 COMMIT;

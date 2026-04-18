@@ -20,34 +20,34 @@ function render_layout_start(string $title, bool $authenticated = true): void
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#111827">
+    <link rel="manifest" href="/manifest.webmanifest">
     <title><?= e($title) ?> | ReproBov</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background: #f4f6f9; }
-        .sidebar { min-height: 100vh; background: #1f2937; color: #f9fafb; }
-        .sidebar .nav-link { color: #d1d5db; }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active { background: #374151; color: #fff; }
-        .card-soft { background: #eef1f4; border: 0; }
-    </style>
+    <link href="/assets/css/app.css" rel="stylesheet">
 </head>
 <body>
 <?php if ($authenticated && $user): ?>
 <div class="container-fluid">
     <div class="row">
         <aside class="col-md-3 col-lg-2 p-3 sidebar">
-            <h5 class="mb-4">ReproBov</h5>
+            <h5 class="mb-1">ReproBov</h5>
+            <p class="small text-light-emphasis mb-4">Gestão reprodutiva bovina</p>
             <nav class="nav flex-column gap-1">
                 <a class="nav-link" href="index.php">Dashboard</a>
                 <a class="nav-link" href="fazendas_listar.php">Fazendas</a>
                 <a class="nav-link" href="animais_listar.php">Animais</a>
                 <a class="nav-link" href="lotes_listar.php">Lotes</a>
                 <a class="nav-link" href="eventos_listar.php">Eventos</a>
+                <a class="nav-link" href="bezerros_listar.php">Bezerros</a>
+                <a class="nav-link" href="relatorios.php">Relatórios</a>
                 <a class="nav-link" href="scan_brinco.php">Scanner de Brinco</a>
                 <?php if (is_admin()): ?>
+                <hr class="border-secondary">
                 <a class="nav-link" href="admin_usuarios.php">Admin Usuários</a>
                 <a class="nav-link" href="admin_fazendas.php">Admin Fazendas</a>
                 <?php endif; ?>
-                <a class="nav-link" href="logout.php">Sair</a>
+                <a class="nav-link mt-2" href="logout.php">Sair</a>
             </nav>
         </aside>
         <main class="col-md-9 col-lg-10 p-0">
@@ -63,6 +63,7 @@ function render_layout_start(string $title, bool $authenticated = true): void
                             <?php endforeach; ?>
                         </select>
                     </form>
+                    <span class="badge badge-soft"><?= e($user['perfil']) ?></span>
                     <span class="text-muted small"><?= e($user['nome']) ?></span>
                 </div>
             </nav>
@@ -91,6 +92,7 @@ function render_layout_end(bool $authenticated = true): void
 </div>
 <?php endif; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/app.js"></script>
 </body>
 </html>
 <?php

@@ -1,0 +1,44 @@
+:root {
+    --rb-bg: #f3f5f8;
+    --rb-sidebar: #111827;
+    --rb-sidebar-muted: #c9d1dc;
+    --rb-primary-soft: #e8edf5;
+}
+
+body {
+    background: var(--rb-bg);
+    font-size: 0.95rem;
+}
+
+.sidebar {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #111827, #1f2937);
+    color: #f8fafc;
+}
+
+.sidebar .nav-link {
+    color: var(--rb-sidebar-muted);
+    border-radius: 0.45rem;
+    padding: 0.5rem 0.65rem;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.card-soft {
+    border: 0;
+    background: var(--rb-primary-soft);
+}
+
+.table {
+    border-radius: 0.45rem;
+    overflow: hidden;
+}
+
+.badge-soft {
+    background: #e9eef4;
+    color: #334155;
+}

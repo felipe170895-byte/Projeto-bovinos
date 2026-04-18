@@ -46,5 +46,8 @@ render_layout_start('Dashboard');
     <div class="col-md-4"><a class="card text-decoration-none text-dark shadow-sm" href="fazendas_listar.php"><div class="card-body"><h6>Gerenciar Fazendas</h6><p class="text-muted mb-0">Criar, editar e trocar fazenda ativa.</p></div></a></div>
     <div class="col-md-4"><a class="card text-decoration-none text-dark shadow-sm" href="animais_listar.php"><div class="card-body"><h6>Animais</h6><p class="text-muted mb-0">Cadastro e acompanhamento do rebanho.</p></div></a></div>
     <div class="col-md-4"><a class="card text-decoration-none text-dark shadow-sm" href="eventos_listar.php"><div class="card-body"><h6>Eventos</h6><p class="text-muted mb-0">Registro reprodutivo e histórico.</p></div></a></div>
+    <div class="col-md-4"><a class="card text-decoration-none text-dark shadow-sm" href="lotes_listar.php"><div class="card-body"><h6>Lotes</h6><p class="text-muted mb-0">Organização por etapa e retiro.</p></div></a></div>
+    <div class="col-md-4"><a class="card text-decoration-none text-dark shadow-sm" href="bezerros_listar.php"><div class="card-body"><h6>Bezerros</h6><p class="text-muted mb-0">Controle de nascimentos.</p></div></a></div>
+    <div class="col-md-4"><a class="card text-decoration-none text-dark shadow-sm" href="relatorios.php"><div class="card-body"><h6>Relatórios</h6><p class="text-muted mb-0">Visão rápida de indicadores.</p></div></a></div>
 </div>
 <?php render_layout_end(); ?>
