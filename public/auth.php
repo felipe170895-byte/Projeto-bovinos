@@ -66,6 +66,21 @@ function user_fazendas(int $usuarioId): array
     return $stmt->fetchAll();
 }
 
+function user_has_fazenda_access(int $usuarioId, int $fazendaId): bool
+{
+    if (is_admin()) {
+        return true;
+    }
+
+    $stmt = db()->prepare('SELECT 1 FROM usuarios_fazendas uf INNER JOIN fazendas f ON f.id = uf.fazenda_id WHERE uf.usuario_id = :usuario_id AND uf.fazenda_id = :fazenda_id AND f.ativa = TRUE');
+    $stmt->execute([
+        ':usuario_id' => $usuarioId,
+        ':fazenda_id' => $fazendaId,
+    ]);
+
+    return (bool) $stmt->fetchColumn();
+}
+
 function ensure_active_fazenda(): void
 {
     $user = current_user();
@@ -87,6 +102,19 @@ function ensure_active_fazenda(): void
     }
 }
 
+function require_active_fazenda(): int
+{
+    require_auth();
+    ensure_active_fazenda();
+
+    $fazendaId = current_fazenda_id();
+    if ($fazendaId === null) {
+        redirect_with_message('fazendas_listar.php', 'Selecione ou vincule uma fazenda para continuar.', 'warning');
+    }
+
+    return $fazendaId;
+}
+
 function redirect_with_message(string $location, string $message, string $type = 'success'): void
 {
     $_SESSION['flash'] = ['message' => $message, 'type' => $type];
@@ -105,4 +133,3 @@ function flash(): ?array
 
     return $flash;
 }
-

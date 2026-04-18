@@ -39,6 +39,10 @@ function render_layout_start(string $title, bool $authenticated = true): void
             <nav class="nav flex-column gap-1">
                 <a class="nav-link" href="index.php">Dashboard</a>
                 <a class="nav-link" href="fazendas_listar.php">Fazendas</a>
+                <a class="nav-link" href="animais_listar.php">Animais</a>
+                <a class="nav-link" href="lotes_listar.php">Lotes</a>
+                <a class="nav-link" href="eventos_listar.php">Eventos</a>
+                <a class="nav-link" href="scan_brinco.php">Scanner de Brinco</a>
                 <?php if (is_admin()): ?>
                 <a class="nav-link" href="admin_usuarios.php">Admin Usuários</a>
                 <a class="nav-link" href="admin_fazendas.php">Admin Fazendas</a>
