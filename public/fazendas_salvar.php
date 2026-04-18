@@ -11,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+verify_csrf_or_abort();
+
 $nome = trim((string) ($_POST['nome'] ?? ''));
 $responsavel = trim((string) ($_POST['responsavel'] ?? ''));
 $cidade = trim((string) ($_POST['cidade'] ?? ''));

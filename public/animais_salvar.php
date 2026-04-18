@@ -11,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+verify_csrf_or_abort();
+
 $numeroBrinco = trim((string) ($_POST['numero_brinco'] ?? ''));
 $raca = trim((string) ($_POST['raca'] ?? ''));
 $categoriaAtual = trim((string) ($_POST['categoria_atual'] ?? ''));

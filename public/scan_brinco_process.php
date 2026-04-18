@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+verify_csrf_or_abort();
+
 $codigo = trim((string) ($_POST['codigo_brinco'] ?? ''));
 if ($codigo === '') {
     redirect_with_message('scan_brinco.php', 'Código inválido.', 'danger');

@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+verify_csrf_or_abort();
+
 $animalId = filter_input(INPUT_POST, 'animal_id', FILTER_VALIDATE_INT);
 $tipoEvento = trim((string) ($_POST['tipo_evento'] ?? ''));
 $dataEvento = (string) ($_POST['data_evento'] ?? '');

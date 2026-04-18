@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+verify_csrf_or_abort();
+
 $nome = trim((string) ($_POST['nome'] ?? ''));
 $etapa = trim((string) ($_POST['etapa'] ?? ''));
 $retiro = trim((string) ($_POST['retiro'] ?? ''));

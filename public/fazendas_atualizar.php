@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+verify_csrf_or_abort();
+
 $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 $nome = trim((string) ($_POST['nome'] ?? ''));
 $responsavel = trim((string) ($_POST['responsavel'] ?? ''));

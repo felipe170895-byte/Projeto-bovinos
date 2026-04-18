@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+verify_csrf_or_abort();
+
 $numeroBrinco = trim((string) ($_POST['numero_brinco'] ?? ''));
 $dataNasc = (string) ($_POST['data_nasc'] ?? '');
 $sexo = (string) ($_POST['sexo'] ?? '');

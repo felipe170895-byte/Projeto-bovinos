@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+verify_csrf_or_abort();
+
 $fazendaId = filter_input(INPUT_POST, 'fazenda_id', FILTER_VALIDATE_INT);
 $usuarioId = filter_input(INPUT_POST, 'usuario_id', FILTER_VALIDATE_INT);
 

@@ -13,6 +13,39 @@ function e(?string $value): string
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
 
+function csrf_token(): string
+{
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+
+    return (string) $_SESSION['csrf_token'];
+}
+
+function csrf_input(): string
+{
+    return '<input type="hidden" name="csrf_token" value="' . e(csrf_token()) . '">';
+}
+
+function verify_csrf_or_abort(): void
+{
+    $token = (string) ($_POST['csrf_token'] ?? '');
+    $sessionToken = (string) ($_SESSION['csrf_token'] ?? '');
+
+    if ($token === '' || $sessionToken === '' || !hash_equals($sessionToken, $token)) {
+        http_response_code(419);
+        exit('Sessão expirada ou token CSRF inválido. Recarregue a página e tente novamente.');
+    }
+}
+
+function apply_security_headers(): void
+{
+    header('X-Frame-Options: SAMEORIGIN');
+    header('X-Content-Type-Options: nosniff');
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+    header("Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data:; font-src 'self' https://cdn.jsdelivr.net; connect-src 'self'; frame-ancestors 'self';");
+}
+
 function current_user(): ?array
 {
     return $_SESSION['usuario'] ?? null;
@@ -113,6 +146,49 @@ function require_active_fazenda(): int
     }
 
     return $fazendaId;
+}
+
+function log_audit(string $acao, ?int $fazendaId = null, ?string $detalhes = null): void
+{
+    $user = current_user();
+    $usuarioId = $user['id'] ?? null;
+
+    try {
+        $stmt = db()->prepare('INSERT INTO audit_logs (usuario_id, fazenda_id, acao, detalhes, ip_origem, user_agent) VALUES (:usuario_id, :fazenda_id, :acao, :detalhes, :ip_origem, :user_agent)');
+        $stmt->execute([
+            ':usuario_id' => $usuarioId,
+            ':fazenda_id' => $fazendaId,
+            ':acao' => $acao,
+            ':detalhes' => $detalhes,
+            ':ip_origem' => $_SERVER['REMOTE_ADDR'] ?? null,
+            ':user_agent' => substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255),
+        ]);
+    } catch (Throwable $e) {
+        // Não interromper fluxo de negócio por falha de auditoria.
+    }
+}
+
+function is_login_rate_limited(string $email): bool
+{
+    $stmt = db()->prepare("SELECT COUNT(*) FROM login_attempts WHERE email = :email AND attempted_at >= (NOW() - INTERVAL '15 minutes')");
+    $stmt->execute([':email' => strtolower(trim($email))]);
+    return (int) $stmt->fetchColumn() >= 8;
+}
+
+function register_login_attempt(string $email, bool $success): void
+{
+    $stmt = db()->prepare('INSERT INTO login_attempts (email, success, ip_origem, attempted_at) VALUES (:email, :success, :ip_origem, NOW())');
+    $stmt->execute([
+        ':email' => strtolower(trim($email)),
+        ':success' => $success,
+        ':ip_origem' => $_SERVER['REMOTE_ADDR'] ?? null,
+    ]);
+}
+
+function clear_login_attempts(string $email): void
+{
+    $stmt = db()->prepare('DELETE FROM login_attempts WHERE email = :email');
+    $stmt->execute([':email' => strtolower(trim($email))]);
 }
 
 function redirect_with_message(string $location, string $message, string $type = 'success'): void

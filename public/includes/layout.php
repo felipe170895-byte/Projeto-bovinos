@@ -6,6 +6,8 @@ require_once __DIR__ . '/../auth.php';
 
 function render_layout_start(string $title, bool $authenticated = true): void
 {
+    apply_security_headers();
+
     $user = current_user();
     $flash = flash();
     $fazendas = [];
@@ -21,6 +23,7 @@ function render_layout_start(string $title, bool $authenticated = true): void
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#111827">
+    <meta name="csrf-token" content="<?= e(csrf_token()) ?>">
     <link rel="manifest" href="/manifest.webmanifest">
     <title><?= e($title) ?> | ReproBov</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -47,7 +50,7 @@ function render_layout_start(string $title, bool $authenticated = true): void
                 <a class="nav-link" href="admin_usuarios.php">Admin Usuários</a>
                 <a class="nav-link" href="admin_fazendas.php">Admin Fazendas</a>
                 <?php endif; ?>
-                <a class="nav-link mt-2" href="logout.php">Sair</a>
+                <form method="post" action="logout.php" class="mt-2"><button type="submit" class="nav-link btn btn-link text-start w-100 p-0">Sair</button></form>
             </nav>
         </aside>
         <main class="col-md-9 col-lg-10 p-0">
